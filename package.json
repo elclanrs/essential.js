@@ -13,9 +13,8 @@
   },
   "scripts": {
     "compile": "browserify src/essential.coffee -s essential -t coffeeify | uglifyjs -m -c --comments -o lib/essential.js",
-    "commit": "git push origin master",
     "test": "coffee test",
-    "prepublish": "npm test && npm run-script compile && npm run-script commit"
+    "prepublish": "npm test && npm run-script compile"
   },
   "licenses": [{
     "type": "MIT",
