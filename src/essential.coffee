@@ -1,5 +1,5 @@
 ###!
-# Essential.js 1.1.0
+# Essential.js 1.1.1
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -34,8 +34,8 @@ compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 sequence = flipN compose
 
 notF = (f) -> (as...) -> not f as...
-isF = curry (x, y) -> y is x
-isntF = curryN 2, notF isF
+eq = curry (x, y) -> y is x
+notEq = curryN 2, notF eq
 
 isType = curry (t, x) -> Object::toString.call(x).slice(8,-1) is t
 
@@ -61,6 +61,8 @@ map = flip builtin Array::map
 filter = flip builtin Array::filter
 any = flip builtin Array::some
 all = flip builtin Array::every
+each = flip builtin Array::forEach
+concat = builtin Array::concat
 
 slice = curry (i, j, xs) -> if j? then xs[i...j] else xs[i..]
 
@@ -74,11 +76,15 @@ drop = partial slice, _, null, _
 inArray = curry (xs, x) -> x in xs
 
 unique = (xs) -> xs.filter (x, i) -> xs.indexOf(x) is i
+dups = (xs) -> xs.filter (x, i) -> xs.indexOf(x) isnt i
 
 flatten = (xs) ->
   while xs.some Array.isArray
     xs = Array::concat.apply([], xs)
   xs
+
+union = compose unique, flatten, variadic
+intersection = compose unique, dups, flatten, variadic
 
 flatMap = flip compose flatten, map
 
@@ -97,6 +103,7 @@ where = curry (obj, xs) ->
   xs.filter (x) ->
     Object.keys(obj).every (k) -> obj[k] is x[k]
 
+values = (obj) -> (v for own _, v of obj)
 pairs = forOwn [], (acc, k, v) -> acc.concat [[k, v]]
 
 zip = (xss...) -> xss[0].map (_, i) -> xss.map pluck i
@@ -108,7 +115,7 @@ unzipObject = forOwn [[],[]], (acc, k, v, i) ->
   acc[0][i] = k ; acc[1][i] = v
   acc
 
-range = (m, n) -> [m..n]
+range = curry (m, n) -> [m..n]
 
 shuffle = (xs) ->
   xs = xs.slice()
@@ -156,13 +163,13 @@ module.exports = {
   curryN, curry, partial,
   flip, flip3, flipN,
   compose, sequence,
-  notF, isF, isntF, isType,
+  notF, eq, notEq, isType,
   toObject, extend, forOwn,
-  fold, foldr, map, filter, any, all,
+  fold, foldr, map, filter, any, all, each, concat,
   slice, first, last, rest, initial, take, drop,
-  inArray, unique, flatten, flatMap,
+  inArray, unique, flatten, union, intersection, flatMap,
   pluck, pluckR, where,
-  pairs, zip, zipWith, zipObject, unzipObject,
+  values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
   format, template, gmatch

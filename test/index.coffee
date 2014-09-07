@@ -30,8 +30,8 @@ test 'compose', compose(curry(add)(1), curry(mul)(2))(2), 5
 test 'sequence', sequence(curry(add)(1), curry(mul)(2))(2), 6
 
 test 'notF', notF(even)(2), false
-test 'isF', isF('foo')('foo'), true
-test 'isntF', isntF('foo')('bar'), true
+test 'eq', eq('foo')('foo'), true
+test 'notEq', notEq('foo')('bar'), true
 
 test 'isType', [isType('Array',[]), isType('Object',{})], [true, true]
 
@@ -42,6 +42,14 @@ test 'extend', extend(a, {b:2, c:3}, {c:4}), {a:1, b:2, c:4}
 test 'extend mutate', a, {a:1, b:2, c:4}
 
 test 'forOwn', forOwn([], ((acc, k, v) -> acc.concat [k, v]), {a:1, b:2, c:3}), ['a',1,'b',2,'c',3]
+
+test 'fold', fold(0, add, [1,2,3]), 6
+test 'foldr', foldr(6, sub, [1,2,3]), 0
+test 'map', map(curry(add)(1), [1,2,3]), [2,3,4]
+test 'filter', filter(even, [1,2,3,4]), [2,4]
+test 'any', any(even, [1,2,3,4]), true
+test 'all', all(even, [1,2,3,4]), false
+test 'concat', concat([1,2], [3,4], [5,6]), [1,2,3,4,5,6]
 
 test 'first', first([1,2,3]), 1
 test 'last', last([1,2,3]), 3
@@ -54,6 +62,8 @@ test 'inArray', inArray([1,2,3], 2), true
 
 test 'unique', unique([1,1,2,2,3,3]), [1,2,3]
 test 'flatten', flatten([1,[2,[3,[4]]]]), [1,2,3,4]
+test 'union', union([1,2], [2,3], [3,4]), [1,2,3,4]
+test 'intersection', intersection([1,2,3],[1,2,4],[1,2,5]), [1,2]
 test 'flatMap', flatMap([1,2], (x) -> flatMap([3,4], (y) -> x + y)), [4,5,5,6]
 
 test 'pluck array', pluck(1, [1,2,3]), 2
@@ -63,6 +73,7 @@ test 'pluckR', true, true
 
 test 'where', where({name:'Peter'}, [{name:'Peter'},{name:'Jon'},{name:'Mike'}]), [{name:'Peter'}]
 
+test 'values', values({a:1, b:2, c:3}), [1,2,3]
 test 'pairs', pairs({a:1, b:2, c:3}), [['a',1],['b',2],['c',3]]
 
 test 'zip', zip([1,2,3], [4,5,6]), [[1,4], [2,5], [3,6]]
