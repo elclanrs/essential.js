@@ -1,4 +1,4 @@
-# Essential.js
+![essential.js](http://i.imgur.com/CalNHKK.png)
 
 **Latest:** 1.1.2  
 **Compatibility:** Node, ES5, Common, AMD  
