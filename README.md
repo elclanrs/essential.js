@@ -8,6 +8,13 @@
 npm install essentialjs
 ```
 
+```javascript
+// Require
+var essential = require('essentialjs')
+// Global functions
+essential.extend(global, essential)
+```
+
 ## Highlights
 
 Essential.js is a simpler alternative to [Underscore.js](http://underscorejs.org/) that gives you a solid base to get started with functional programming in JavaScript "the right way":
