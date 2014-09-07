@@ -1,6 +1,6 @@
 # Essential.js
 
-**Latest:** 1.1.0  
+**Latest:** 1.1.1  
 **Compatibility:** Node, ES5, Common, AMD  
 **License:** MIT
 
