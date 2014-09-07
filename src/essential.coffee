@@ -1,5 +1,5 @@
 ###!
-# Essential.js 1.1.1
+# Essential.js 1.1.2
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -167,7 +167,7 @@ module.exports = {
   toObject, extend, forOwn,
   fold, foldr, map, filter, any, all, each, concat,
   slice, first, last, rest, initial, take, drop,
-  inArray, unique, flatten, union, intersection, flatMap,
+  inArray, unique, dups, flatten, union, intersection, flatMap,
   pluck, pluckR, where,
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,

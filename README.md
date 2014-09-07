@@ -1,6 +1,6 @@
 # Essential.js
 
-**Latest:** 1.1.1  
+**Latest:** 1.1.2  
 **Compatibility:** Node, ES5, Common, AMD  
 **License:** MIT
 
@@ -64,6 +64,7 @@ take(Number, Array)
 drop(Number, Array)  
 inArray(Array, x)  
 unique(Array)  
+dups(Array)  
 flatten(Array)  
 union(Array...)  
 intersection(Array...)

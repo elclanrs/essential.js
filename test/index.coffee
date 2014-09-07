@@ -61,6 +61,7 @@ test 'drop', drop(2, [1,2,3]), [3]
 test 'inArray', inArray([1,2,3], 2), true
 
 test 'unique', unique([1,1,2,2,3,3]), [1,2,3]
+test 'dups', dups([1,1,2,2,3,4]), [1,2]
 test 'flatten', flatten([1,[2,[3,[4]]]]), [1,2,3,4]
 test 'union', union([1,2], [2,3], [3,4]), [1,2,3,4]
 test 'intersection', intersection([1,2,3],[1,2,4],[1,2,5]), [1,2]
