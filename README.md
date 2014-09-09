@@ -53,7 +53,7 @@ map          : (f(x) -> y, Array<x>) -> Array<y>
 filter       : (f(x) -> Bool, Array<x>) -> Array<x>
 any          : (f(x) -> Bool, Array<x>) -> Array<x>
 all          : (f(x) -> Bool, Array<x>) -> Array<x>
-each         : (f(x) -> Bool, Array(x)) -> Array<x>
+each         : (f(x) -> Bool, Array<x>) -> Array<x>
 concat       : (Array...) -> Array
 slice        : (Number, Number?, Array) -> Array
 first        : (Array<x>) -> x
