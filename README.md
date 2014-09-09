@@ -34,7 +34,7 @@ variadic     : (x1, x2, ..., xN) -> Array<x>
 apply        : (f, x1, x2, ..., xN) -> f(x1, x2, ..., xN)
 curryN       : (n, f(x1, x2, ..., n)) -> f(x1)(x2)(...)(n)
 curry        : (f(x1, x2, ..., xN)) -> f(x1)(x2)(...)(xN)
-partial      : (f(x1, x2, ..., xN), x1, x2, ..., xN) -> f()
+partial      : (f, Arguments...)
 flip         : (f(x, y)) -> f(y, x)
 flip3        : (f(x, y, z)) -> f(z, y, x)
 flipN        : (f(x1, x2, ..., xN)) -> f(xN, ..., x2, x1)
