@@ -46,7 +46,7 @@ notEq        : (x, y) -> Bool
 isType       : (String, x) -> Bool
 toObject     : (Array) -> Object
 extend       : (target: Object, Object...) -> target
-forOwn       : (acc, f(acc, k, v), Object<k,v>) -> acc
+forOwn       : (acc, f(acc, k, v) -> acc, Object<k,v>) -> acc
 fold         : (acc, f(acc, x) -> acc, Array<x>) -> acc
 foldr        : (acc, f(acc, x) -> acc, Array<x>) -> acc
 map          : (f(x) -> y, Array<x>) -> Array<y>
