@@ -43,7 +43,7 @@ sequence     : (fs...)
 notF         : (f)
 eq           : (x, y) -> Bool
 notEq        : (x, y) -> Bool
-isType       : (String, x)
+isType       : (String, x) -> Bool
 toObject     : (Array) -> Object
 extend       : (target: Object, Object...) -> target
 forOwn       : (acc, f(acc, k, v), Object<k,v>) -> acc
