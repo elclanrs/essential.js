@@ -2,7 +2,7 @@
 
 **Latest:** 1.1.2  
 **Compatibility:** Node, ES5, Common, AMD  
-**License:** MIT
+**License:** MIT  
 
 ```
 npm install essentialjs
@@ -27,62 +27,62 @@ Essential.js is a simpler alternative to [Underscore.js](http://underscorejs.org
 ## API
 
 ```javascript
-id(x)  
-builtin(f)  
-toArray(ArrayLike)  
-variadic(as...)  
-apply(f, as...)  
-curryN(n, f)  
-curry(f)  
-partial(f, as...)  
-flip(f(x, y))  
-flip3(f(x, y, z))  
-flipN(f(as...))  
-compose(fs...)  
-sequence(fs...)  
-notF(f)  
-eq(x, y)  
-notEq(x, y)  
-isType(t, x)  
-toObject(Array)  
-extend(Object...)  
-forOwn(acc, f(acc, k, v), Object<k,v>)  
-fold(acc, f(acc, x), Array<x>)  
-foldr(acc, f(acc, x), Array<x>)  
-map(f(x), Array<x>)  
-filter(f(x), Array<x>)  
-any(f(x), Array<x>)  
-all(f(x), Array<x>)  
-each(f(x), Array(x))  
-concat(Array...)  
-slice(Number, Number?, Array)  
-first(Array)  
-last(Array)  
-rest(Array)  
-initial(Array)  
-take(Number, Array)  
-drop(Number, Array)  
-inArray(Array, x)  
-unique(Array)  
-dups(Array)  
-flatten(Array)  
-union(Array...)  
-intersection(Array...)
-flatMap(Array<x>, f(x))  
-pluck(String|Number, Array|Object)  
-pluckR(String|Number, Array|Object)  
-where(Object, Array<Object>)  
-pairs(Object)  
-zip(Array...)  
-zipWith(f(x1, x2, ..., xN), Array<x>...)  
-zipObject(Array<Array>)  
-unzipObject(Object)  
-range(Number, Number)  
-shuffle(Array)  
-sortBy(Array)  
-groupBy(Array)  
-countBy(Array)  
-format(Array, String)  
-template(Object, String)  
-gmatch(RegExp, String)  
+id           : (x) -> x
+builtin      : (x.f(Arguments...)) -> f(x, Arguments...)
+toArray      : (ArrayLike<x>) -> Array<x>
+variadic     : (x1, x2, ..., xN) -> Array<x>
+apply        : (f, x1, x2, ..., xN) -> f(x1, x2, ..., xN)
+curryN       : (n, f(x1, x2, ..., n)) -> f(x1)(x2)(...)(n)
+curry        : (f(x1, x2, ..., xN)) -> f(x1)(x2)(...)(xN)
+partial      : (f(x1, x2, ..., xN), x1, x2, ..., xN) -> f()
+flip         : (f(x, y)) -> f(y, x)
+flip3        : (f(x, y, z)) -> f(z, y, x)
+flipN        : (f(x1, x2, ..., xN)) -> f(xN, ..., x2, x1)
+compose      : (fs...)
+sequence     : (fs...)
+notF         : (f)
+eq           : (x, y) -> Bool
+notEq        : (x, y) -> Bool
+isType       : (String, x)
+toObject     : (Array) -> Object
+extend       : (target: Object, Object...) -> target
+forOwn       : (acc, f(acc, k, v), Object<k,v>) -> acc
+fold         : (acc, f(acc, x) -> acc, Array<x>) -> acc
+foldr        : (acc, f(acc, x) -> acc, Array<x>) -> acc
+map          : (f(x) -> y, Array<x>) -> Array<y>
+filter       : (f(x) -> Bool, Array<x>) -> Array<x>
+any          : (f(x) -> Bool, Array<x>) -> Array<x>
+all          : (f(x) -> Bool, Array<x>) -> Array<x>
+each         : (f(x) -> Bool, Array(x)) -> Array<x>
+concat       : (Array...) -> Array
+slice        : (Number, Number?, Array) -> Array
+first        : (Array<x>) -> x
+last         : (Array<x>) -> x
+rest         : (Array) -> Array
+initial      : (Array) -> Array
+take         : (Number, Array) -> Array
+drop         : (Number, Array) -> Array
+inArray      : (Array<x>, x) -> Bool
+unique       : (Array) -> Array
+dups         : (Array) -> Array
+flatten      : (Array<Array<x>>) -> Array<x>
+union        : (Array...) -> Array
+intersection : (Array...) -> Array
+flatMap      : (Array<x>, f(x)) -> Array<x>
+pluck        : (String|Number, Array|Object) -> Any
+pluckR       : (String|Number, Array|Object) -> Any
+where        : (Object, Array<Object>) -> Array<Object>
+pairs        : (Object) -> Array
+zip          : (Array...) -> Array
+zipWith      : (f(Arguments<x>...) -> y, Array<x>...) -> Array<y>
+zipObject    : (Array<Array<k,v>>) -> Object<k,v>
+unzipObject  : (Object<k,v>) -> Array<Array<k,v>>
+range        : (Number, Number) -> Array
+shuffle      : (Array) -> Array
+sortBy       : (Array) -> Array
+groupBy      : (Array) -> Object
+countBy      : (Array) -> Object
+format       : (Array, String) -> String
+template     : (Object, String) -> String
+gmatch       : (RegExp, String) -> String
 ```
