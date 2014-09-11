@@ -9,10 +9,9 @@ npm install essentialjs
 ```
 
 ```javascript
-// Require
-var essential = require('essentialjs')
-// Global functions
-essential.extend(global, essential)
+// Add functions to global namespace,
+// `global` for Node or `window` for browser
+require('essentialjs').expose(global)
 ```
 
 ## Highlights
