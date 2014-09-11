@@ -1,5 +1,5 @@
 ###!
-# Essential.js 1.1.2
+# Essential.js 1.1.3
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -15,7 +15,7 @@ curryN = (n, f, as=[]) -> (bs...) ->
   bs = as.concat bs
   if bs.length < n then curryN n, f, bs else f bs...
 
-curry = (f) -> (as...) ->
+λ = curry = (f) -> (as...) ->
   if f.length > as.length then curryN f.length, f, as else f as...
 
 partial = (f, as...) -> (bs...) ->
@@ -26,18 +26,18 @@ partial = (f, as...) -> (bs...) ->
       args[i] = args.splice(-1)[0]
   f args...
 
-flip = curry (f, x, y) -> f y, x
-flip3 = curry (f, x, y, z) -> f z, y, x
+flip = λ (f, x, y) -> f y, x
+flip3 = λ (f, x, y, z) -> f z, y, x
 flipN = (f) -> (as...) -> f as.reverse()...
 
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 sequence = flipN compose
 
 notF = (f) -> (as...) -> not f as...
-eq = curry (x, y) -> y is x
+eq = λ (x, y) -> y is x
 notEq = curryN 2, notF eq
 
-isType = curry (t, x) -> Object::toString.call(x).slice(8,-1) is t
+isType = λ (t, x) -> Object::toString.call(x).slice(8,-1) is t
 
 toObject = (xs) ->
   xs.reduce (acc, x, i) ->
@@ -51,7 +51,7 @@ extend = (objs...) ->
     acc
   ,objs[0]
 
-forOwn = curry (acc, f, obj) ->
+forOwn = λ (acc, f, obj) ->
   Object.keys(obj).forEach (k, i) -> acc = f acc, k, obj[k], i
   acc
 
@@ -64,7 +64,7 @@ all = flip builtin Array::every
 each = flip builtin Array::forEach
 concat = builtin Array::concat
 
-slice = curry (i, j, xs) -> if j? then xs[i...j] else xs[i..]
+slice = λ (i, j, xs) -> if j? then xs[i...j] else xs[i..]
 
 first = ([x, xs...]) -> x
 last = ([xs..., x]) -> x
@@ -73,7 +73,7 @@ initial = slice 0, -1
 take = slice 0
 drop = partial slice, _, null, _
 
-inArray = curry (xs, x) -> x in xs
+inArray = λ (xs, x) -> x in xs
 
 unique = (xs) -> xs.filter (x, i) -> xs.indexOf(x) is i
 dups = (xs) -> xs.filter (x, i) -> xs.indexOf(x) isnt i
@@ -88,18 +88,18 @@ intersection = compose unique, dups, flatten, variadic
 
 flatMap = flip compose flatten, map
 
-pluck = curry (x, xs) ->
+pluck = λ (x, xs) ->
   String(x).split('.').reduce (acc, x) ->
     acc and acc[x]
   ,xs
 
-pluckR = curry (x, xs) ->
+pluckR = λ (x, xs) ->
   out = []
   while xs = pluck x, xs
     out.push xs
   out
 
-where = curry (obj, xs) ->
+where = λ (obj, xs) ->
   xs.filter (x) ->
     Object.keys(obj).every (k) -> obj[k] is x[k]
 
@@ -115,7 +115,7 @@ unzipObject = forOwn [[],[]], (acc, k, v, i) ->
   acc[0][i] = k ; acc[1][i] = v
   acc
 
-range = curry (m, n) -> [m..n]
+range = λ (m, n) -> [m..n]
 
 shuffle = (xs) ->
   xs = xs.slice()
@@ -124,7 +124,7 @@ shuffle = (xs) ->
     [xs[i], xs[j]] = [xs[j], xs[i]]
   xs
 
-sortBy = curry (f, xs) ->
+sortBy = λ (f, xs) ->
   xs.sort (x, y) ->
     fx = f x
     fy = f y
@@ -134,10 +134,10 @@ sortBy = curry (f, xs) ->
       when fx < fy then -1
       else 0
 
-groupBy = curry (f, xs) ->
+groupBy = λ (f, xs) ->
   xs.reduce (acc, x) ->
     fx = f x
-    acc[fx] = (acc[fx] or []).concat [fx]
+    acc[fx] = (acc[fx] or []).concat [x]
     acc
   ,{}
 
@@ -145,13 +145,13 @@ countBy = sequence groupBy, forOwn {}, (acc, k, v) ->
   acc[k] = v.length
   acc
 
-format = curry (xs, x) ->
+format = λ (xs, x) ->
   x.replace /%(\d+)/g, (_, i) -> xs[--i] or ''
 
-template = curry (obj, x) ->
+template = λ (obj, x) ->
   x.replace /#\{(.+?)\}/g, (_, k) -> obj[k] or ''
 
-gmatch = curry (re, x) ->
+gmatch = λ (re, x) ->
   out = []
   x.replace re, (as...) -> out.push.apply out, as[1...-2]
   out
@@ -160,7 +160,7 @@ module.exports = {
   _, id,
   builtin, toArray,
   variadic, apply,
-  curryN, curry, partial,
+  curryN, λ, curry, partial,
   flip, flip3, flipN,
   compose, sequence,
   notF, eq, notEq, isType,
@@ -172,5 +172,7 @@ module.exports = {
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch
+  format, template, gmatch,
 }
+
+module.exports.expose = partial extend, _, module.exports

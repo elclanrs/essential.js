@@ -88,7 +88,8 @@ test 'range', range(0,10), [0..10]
 test 'shuffle', true, true
 
 test 'sortBy', sortBy(id, [3,4,2,5,1]), [1,2,3,4,5]
-test 'groupBy', groupBy(Math.round, [1.1,1.2,1.3,1.6,1.7,1.8]), {1:[1,1,1], 2:[2,2,2]}
+test 'groupBy', groupBy(Math.round, [1.1,1.2,1.3,1.6,1.7,1.8]), {1:[1.1,1.2,1.3], 2:[1.6,1.7,1.8]}
+test 'groupBy - collection', groupBy(((x) -> x.n), [{n:1},{n:1},{n:2},{n:2}]), {1:[{n:1},{n:1}],2:[{n:2},{n:2}]}
 test 'countBy', countBy(Math.round, [1.1,1.2,1.3,1.6,1.7,1.8]), {1:3, 2:3}
 
 test 'format', format(['a','c'], '%1b%2d'), 'abcd'
