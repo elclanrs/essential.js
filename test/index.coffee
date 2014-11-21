@@ -1,15 +1,13 @@
+require('../src/essential.coffee').expose global
 assert = require('assert').deepEqual
-essential = require '../src/essential.coffee'
-
-essential.extend global, essential
 
 test = (name, result, expected) ->
   assert result, expected, "#{name}: expected #{JSON.stringify expected} but got #{JSON.stringify result}"
   console.log "#{name} ✓"
 
-add = (x, y) -> x + y
-mul = (x, y) -> x * y
-sub = (x, y) -> x - y
+add = λ (x, y) -> x + y
+mul = λ (x, y) -> x * y
+sub = λ (x, y) -> x - y
 append = (as...) -> as.reduce add
 
 even = (x) -> x % 2 is 0
@@ -19,8 +17,9 @@ even = (x) -> x % 2 is 0
 test 'curryN', curryN(2, add)(1)(2), 3
 test 'curry', curry(add)(1)(2), 3
 
-test 'partial in order', partial(add, 1)(2), 3
-test 'partial with placeholder', partial(add, _, 1)(2), 3
+test 'partial - in order', partial(add, 1)(2), 3
+test 'partial - with placeholder', partial(add, _, 1)(2), 3
+test 'partial - with placeholder interleaved', partial(append, _, 'b', _)('a','c'), 'abc'
 
 test 'flip', flip(sub)(2, 3), 1
 test 'flip3', flip3((x, y, z) -> x - y - z)(2, 3, 5), 0
@@ -28,6 +27,7 @@ test 'flipN', flipN(append)('a','b','c'), 'cba'
 
 test 'compose', compose(curry(add)(1), curry(mul)(2))(2), 5
 test 'sequence', sequence(curry(add)(1), curry(mul)(2))(2), 6
+test 'pcompose', pcompose(add(1), mul(2))([1,2]), [2,4]
 
 test 'notF', notF(even)(2), false
 test 'eq', eq('foo')('foo'), true
@@ -37,9 +37,12 @@ test 'isType', [isType('Array',[]), isType('Object',{})], [true, true]
 
 test 'toObject', toObject(['a',1,'b',2,'c',3]), {a:1, b:2, c:3}
 
-a = {a:1}
-test 'extend', extend(a, {b:2, c:3}, {c:4}), {a:1, b:2, c:4}
-test 'extend mutate', a, {a:1, b:2, c:4}
+obj = {a:1}
+test 'extend', extend(obj, {b:2, c:3}, {c:4}), {a:1, b:2, c:4}
+test 'extend - mutates target', obj, {a:1, b:2, c:4}
+
+a = ['foo',[1,{b:1}]]
+test 'deepClone', a, deepClone a
 
 test 'forOwn', forOwn([], ((acc, k, v) -> acc.concat [k, v]), {a:1, b:2, c:3}), ['a',1,'b',2,'c',3]
 
@@ -49,6 +52,7 @@ test 'map', map(curry(add)(1), [1,2,3]), [2,3,4]
 test 'filter', filter(even, [1,2,3,4]), [2,4]
 test 'any', any(even, [1,2,3,4]), true
 test 'all', all(even, [1,2,3,4]), false
+test 'indexOf', indexOf(2, [1,2,3]), 1
 test 'concat', concat([1,2], [3,4], [5,6]), [1,2,3,4,5,6]
 
 test 'first', first([1,2,3]), 1
@@ -85,7 +89,8 @@ test 'unzipObject', unzipObject({a:1, b:2}), [['a','b'], [1,2]]
 
 test 'range', range(0,10), [0..10]
 
-test 'shuffle', true, true
+xs = [1..5]
+test 'shuffle - copies array', shuffle(xs) is xs, false
 
 test 'sortBy', sortBy(id, [3,4,2,5,1]), [1,2,3,4,5]
 test 'groupBy', groupBy(Math.round, [1.1,1.2,1.3,1.6,1.7,1.8]), {1:[1.1,1.2,1.3], 2:[1.6,1.7,1.8]}
@@ -96,4 +101,9 @@ test 'format', format(['a','c'], '%1b%2d'), 'abcd'
 test 'template', template({a:'a', c:'c'}, '#{a}b#{c}d'), 'abcd'
 test 'gmatch', gmatch(/\{(.+?)\}/g, '{a}b{c}d'), ['a','c']
 
-console.log 'All good!'
+console.log """
+
+***********************
+*      All good!      *
+***********************
+"""

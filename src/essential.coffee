@@ -1,11 +1,14 @@
-###!
-# Essential.js 1.1.3
+###
+# Essential.js 1.1.4
 # @author Cedric Ruiz
 # @license MIT
 ###
 
+# Core
+#
 _ = {}
 id = (x) -> x
+K = (x) -> -> x
 builtin = id.bind.bind id.call
 toArray = builtin Array::slice
 variadic = (as...) -> as
@@ -33,6 +36,10 @@ flipN = (f) -> (as...) -> f as.reverse()...
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 sequence = flipN compose
 
+pcompose = (fs...) ->
+  (xs) ->
+    xs.map (x, i) -> fs[i]? x
+
 notF = (f) -> (as...) -> not f as...
 eq = λ (x, y) -> y is x
 notEq = curryN 2, notF eq
@@ -46,10 +53,21 @@ toObject = (xs) ->
   ,{}
 
 extend = (objs...) ->
-  objs.slice(1).reduce (acc, x) ->
+  objs[1..].reduce (acc, x) ->
     Object.keys(x).forEach (k) -> acc[k] = x[k]
     acc
   ,objs[0]
+
+deepClone = (obj) ->
+  init = if isType 'Array', obj then [] else {}
+  Object.keys(obj).reduce (acc, k) ->
+    x = obj[k]
+    if isType('Array', x) or isType 'Object', x
+      acc[k] = deepClone x
+    else
+      acc[k] = x
+    acc
+  ,init
 
 forOwn = λ (acc, f, obj) ->
   Object.keys(obj).forEach (k, i) -> acc = f acc, k, obj[k], i
@@ -62,6 +80,7 @@ filter = flip builtin Array::filter
 any = flip builtin Array::some
 all = flip builtin Array::every
 each = flip builtin Array::forEach
+indexOf = flip builtin Array::indexOf
 concat = builtin Array::concat
 
 slice = λ (i, j, xs) -> if j? then xs[i...j] else xs[i..]
@@ -75,12 +94,22 @@ drop = partial slice, _, null, _
 
 inArray = λ (xs, x) -> x in xs
 
-unique = (xs) -> xs.filter (x, i) -> xs.indexOf(x) is i
+uniqueBy = λ (f, xs) ->
+  seen = []
+  xs.filter (x) ->
+    fx = f x
+    return true unless fx?
+    return if fx in seen
+    seen.push fx
+    true
+
+unique = uniqueBy id
+
 dups = (xs) -> xs.filter (x, i) -> xs.indexOf(x) isnt i
 
 flatten = (xs) ->
   while xs.some Array.isArray
-    xs = Array::concat.apply([], xs)
+    xs = Array::concat.apply [], xs
   xs
 
 union = compose unique, flatten, variadic
@@ -118,11 +147,11 @@ unzipObject = forOwn [[],[]], (acc, k, v, i) ->
 range = λ (m, n) -> [m..n]
 
 shuffle = (xs) ->
-  xs = xs.slice()
-  for i in [xs.length-1..1]
+  ys = xs[..]
+  for i in [ys.length-1..1]
     j = Math.random() * (i + 1) |0
-    [xs[i], xs[j]] = [xs[j], xs[i]]
-  xs
+    [ys[i], ys[j]] = [ys[j], ys[i]]
+  ys
 
 sortBy = λ (f, xs) ->
   xs.sort (x, y) ->
@@ -156,23 +185,26 @@ gmatch = λ (re, x) ->
   x.replace re, (as...) -> out.push.apply out, as[1...-2]
   out
 
+# Exports
+#
 module.exports = {
-  _, id,
+  # Core
+  _, id, K,
   builtin, toArray,
   variadic, apply,
   curryN, λ, curry, partial,
   flip, flip3, flipN,
-  compose, sequence,
+  compose, sequence, pcompose,
   notF, eq, notEq, isType,
-  toObject, extend, forOwn,
-  fold, foldr, map, filter, any, all, each, concat,
+  toObject, extend, deepClone, forOwn,
+  fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
-  inArray, unique, dups, flatten, union, intersection, flatMap,
+  inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
   pluck, pluckR, where,
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch,
+  format, template, gmatch
 }
 
 module.exports.expose = partial extend, _, module.exports
