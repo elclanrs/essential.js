@@ -33,7 +33,7 @@ module.exports = {
   curryN, λ, curry, partial,
   flip, flip3, flipN,
   compose, sequence, pcompose,
-  notF, eq, notEq, isType,
+  notF, eq, notEq, typeOf, isType,
   toObject, extend, deepClone, forOwn,
   fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,

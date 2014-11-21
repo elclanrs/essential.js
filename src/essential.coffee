@@ -44,7 +44,8 @@ notF = (f) -> (as...) -> not f as...
 eq = λ (x, y) -> y is x
 notEq = curryN 2, notF eq
 
-isType = λ (t, x) -> Object::toString.call(x).slice(8,-1) is t
+typeOf = (x) -> Object::toString.call(x).slice(8,-1)
+isType = λ (t, x) -> typeOf(x) is t
 
 toObject = (xs) ->
   xs.reduce (acc, x, i) ->
@@ -195,7 +196,7 @@ module.exports = {
   curryN, λ, curry, partial,
   flip, flip3, flipN,
   compose, sequence, pcompose,
-  notF, eq, notEq, isType,
+  notF, eq, notEq, typeOf, isType,
   toObject, extend, deepClone, forOwn,
   fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
