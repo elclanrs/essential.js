@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.5
+# Essential.js 1.1.6
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -12,14 +12,16 @@ K = (x) -> -> x
 builtin = id.bind.bind id.call
 toArray = builtin Array::slice
 variadic = (as...) -> as
-apply = (f, as...) -> f as.concat.apply([], as)...
 
-curryN = (n, f, as=[]) -> (bs...) ->
+ncurry = (n, f, as=[]) -> (bs...) ->
   bs = as.concat bs
-  if bs.length < n then curryN n, f, bs else f bs...
+  if bs.length < n then ncurry n, f, bs else f bs...
 
 λ = curry = (f) -> (as...) ->
-  if f.length > as.length then curryN f.length, f, as else f as...
+  if f.length > as.length then ncurry f.length, f, as else f as...
+
+apply = λ (f, as) -> f as...
+applyNew = λ (f, as) -> new (f.bind.apply f, [null].concat as)
 
 partial = (f, as...) -> (bs...) ->
   args = as.concat bs
@@ -31,18 +33,17 @@ partial = (f, as...) -> (bs...) ->
 
 flip = λ (f, x, y) -> f y, x
 flip3 = λ (f, x, y, z) -> f z, y, x
-flipN = (f) -> (as...) -> f as.reverse()...
+nflip = (f) -> (as...) -> f as.reverse()...
 
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
-sequence = flipN compose
+pcompose = (fs...) -> (xs) -> xs.map (x, i) -> fs[i]? x
+sequence = nflip compose
 
-pcompose = (fs...) ->
-  (xs) ->
-    xs.map (x, i) -> fs[i]? x
+over = λ (f, g, x, y) -> f g(x), g y
 
 notF = (f) -> (as...) -> not f as...
 eq = λ (x, y) -> y is x
-notEq = curryN 2, notF eq
+notEq = ncurry 2, notF eq
 
 typeOf = (x) -> Object::toString.call(x).slice(8,-1)
 isType = λ (t, x) -> typeOf(x) is t
@@ -110,7 +111,7 @@ dups = (xs) -> xs.filter (x, i) -> xs.indexOf(x) isnt i
 
 flatten = (xs) ->
   while xs.some Array.isArray
-    xs = Array::concat.apply [], xs
+    xs = Array::concat xs...
   xs
 
 union = compose unique, flatten, variadic
@@ -123,7 +124,7 @@ pluck = λ (x, xs) ->
     acc and acc[x]
   ,xs
 
-pluckR = λ (x, xs) ->
+rpluck = λ (x, xs) ->
   out = []
   while xs = pluck x, xs
     out.push xs
@@ -186,26 +187,49 @@ gmatch = λ (re, x) ->
   x.replace re, (as...) -> out.push.apply out, as[1...-2]
   out
 
+# Fantasy
+#
+fmap = λ (f, ma) -> ma.map f
+ap = λ (mf, ma) -> ma.ap mf
+chain = λ (f, ma) -> ma.chain f
+
+liftA = λ (ctor, f, ms) ->
+  ms.reduce(
+    (acc, ma) -> acc.ap ma
+    ctor.of f
+  )
+
+seqM = λ (ctor, ms) ->
+  ms.reduceRight(
+    (ma, mb) ->
+      ma.chain (a) ->
+        mb.map (b) ->
+          [b].concat a
+    ctor.of []
+  )
+
 # Exports
 #
 module.exports = {
   # Core
   _, id, K,
   builtin, toArray,
-  variadic, apply,
-  curryN, λ, curry, partial,
-  flip, flip3, flipN,
-  compose, sequence, pcompose,
-  notF, eq, notEq, typeOf, isType,
+  variadic, apply, applyNew,
+  ncurry, λ, curry, partial,
+  flip, flip3, nflip,
+  compose, pcompose, sequence, over,
+  notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepClone, forOwn,
   fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
-  pluck, pluckR, where,
+  pluck, rpluck, where,
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch
+  format, template, gmatch,
+  # Fantasy
+  fmap, ap, chain, liftA, seqM
 }
 
 module.exports.expose = partial extend, _, module.exports

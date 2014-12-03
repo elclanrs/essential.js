@@ -1,6 +1,6 @@
 ![essential.js](http://i.imgur.com/CalNHKK.png)
 
-**Latest:** 1.1.5  
+**Latest:** 1.1.6  
 **Compatibility:** Node, ES5, Common, AMD  
 **License:** MIT  
 
@@ -27,9 +27,10 @@ Essential.js is an alternative to [Underscore.js](http://underscorejs.org/) that
 
 ```javascript
 module.exports = {
+  # Core
   _, id, K,
   builtin, toArray,
-  variadic, apply,
+  variadic, apply, applyNew,
   curryN, λ, curry, partial,
   flip, flip3, flipN,
   compose, sequence, pcompose,
@@ -43,5 +44,7 @@ module.exports = {
   range, shuffle,
   sortBy, groupBy, countBy,
   format, template, gmatch
+  # Fantasy
+  fmap, ap, chain, liftA, seqM
 }
 ```

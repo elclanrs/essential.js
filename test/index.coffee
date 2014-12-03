@@ -14,7 +14,7 @@ even = (x) -> x % 2 is 0
 
 # Tests
 
-test 'curryN', curryN(2, add)(1)(2), 3
+test 'ncurry', ncurry(2, add)(1)(2), 3
 test 'curry', curry(add)(1)(2), 3
 
 test 'partial - in order', partial(add, 1)(2), 3
@@ -23,11 +23,12 @@ test 'partial - with placeholder interleaved', partial(append, _, 'b', _)('a','c
 
 test 'flip', flip(sub)(2, 3), 1
 test 'flip3', flip3((x, y, z) -> x - y - z)(2, 3, 5), 0
-test 'flipN', flipN(append)('a','b','c'), 'cba'
+test 'nflip', nflip(append)('a','b','c'), 'cba'
 
 test 'compose', compose(curry(add)(1), curry(mul)(2))(2), 5
 test 'sequence', sequence(curry(add)(1), curry(mul)(2))(2), 6
-test 'pcompose', pcompose(add(1), mul(2))([1,2]), [2,4]
+test 'pcompose', pcompose(add(1), mul(2), add(3))([1,2,3]), [2,4,6]
+test 'over', over(add, mul(2), 3, 4), 14
 
 test 'notF', notF(even)(2), false
 test 'eq', eq('foo')('foo'), true
@@ -64,6 +65,7 @@ test 'drop', drop(2, [1,2,3]), [3]
 
 test 'inArray', inArray([1,2,3], 2), true
 
+test 'uniqueBy', uniqueBy(((x) -> x.length), ['a','b','aa','bb']), ['a','aa']
 test 'unique', unique([1,1,2,2,3,3]), [1,2,3]
 test 'dups', dups([1,1,2,2,3,4]), [1,2]
 test 'flatten', flatten([1,[2,[3,[4]]]]), [1,2,3,4]
