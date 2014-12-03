@@ -54,20 +54,18 @@ toObject = (xs) ->
     acc
   ,{}
 
-extend = (objs...) ->
-  objs[1..].reduce (acc, x) ->
+extend = (a, bs...) ->
+  bs.reduce (acc, x) ->
     Object.keys(x).forEach (k) -> acc[k] = x[k]
     acc
-  ,objs[0]
+  ,a
 
 deepClone = (obj) ->
   init = if isType 'Array', obj then [] else {}
   Object.keys(obj).reduce (acc, k) ->
     x = obj[k]
-    if isType('Array', x) or isType 'Object', x
-      acc[k] = deepClone x
-    else
-      acc[k] = x
+    mustClone = isType('Array', x) or isType 'Object', x
+    acc[k] = if mustClone then deepClone x else x
     acc
   ,init
 
@@ -150,7 +148,7 @@ range = λ (m, n) -> [m..n]
 
 shuffle = (xs) ->
   ys = xs[..]
-  for i in [ys.length-1..1]
+  for _, i in ys
     j = Math.random() * (i + 1) |0
     [ys[i], ys[j]] = [ys[j], ys[i]]
   ys
