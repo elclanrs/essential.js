@@ -48,6 +48,10 @@ obj = {a:1}
 test 'extend', extend(obj, {b:2, c:3}, {c:4}), {a:1, b:2, c:4}
 test 'extend - mutates target', obj, {a:1, b:2, c:4}
 
+x = {a: {b: 1, c: 2}}
+y = {a: {b: 123}}
+test 'deepExtend', deepExtend(x, y), {a: {b: 123, c: 2}}
+
 a = ['foo',[1,{b:1}]]
 test 'deepClone', a, deepClone a
 

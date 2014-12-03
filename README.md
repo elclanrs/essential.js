@@ -1,6 +1,6 @@
 ![essential.js](http://i.imgur.com/CalNHKK.png)
 
-**Latest:** 1.1.9  
+**Latest:** 1.2.0  
 **Compatibility:** Node, ES5, Common, AMD  
 **License:** MIT  
 
@@ -35,7 +35,7 @@ module.exports = {
   flip, flip3, nflip,
   compose, pcompose, sequence, over,
   notF, not:notF, eq, notEq, typeOf, isType,
-  toObject, extend, deepClone, forOwn,
+  toObject, extend, deepExtend, deepClone, forOwn,
   fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,

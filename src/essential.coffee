@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.9
+# Essential.js 1.2.0
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -55,10 +55,19 @@ toObject = (xs) ->
   ,{}
 
 extend = (a, bs...) ->
-  bs.reduce (acc, x) ->
-    Object.keys(x).forEach (k) -> acc[k] = x[k]
-    acc
-  ,a
+  for b in bs
+    for own k, v of b
+      a[k] = v
+  a
+
+deepExtend = (a, bs...) ->
+  for b in bs
+    for own k, v of b
+      a[k] = if typeof v is 'object'
+        deepExtend a[k], v
+      else
+        v
+  a
 
 deepClone = (obj) ->
   init = if isType 'Array', obj then [] else {}
@@ -217,7 +226,7 @@ module.exports = {
   flip, flip3, nflip,
   compose, pcompose, sequence, over,
   notF, not:notF, eq, notEq, typeOf, isType,
-  toObject, extend, deepClone, forOwn,
+  toObject, extend, deepExtend, deepClone, forOwn,
   fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
