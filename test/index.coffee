@@ -12,6 +12,9 @@ append = (as...) -> as.reduce add
 
 even = (x) -> x % 2 is 0
 
+class Person
+  constructor: (@name, @age) ->
+
 # Tests
 
 test 'ncurry', ncurry(2, add)(1)(2), 3
@@ -20,6 +23,9 @@ test 'curry', curry(add)(1)(2), 3
 test 'partial - in order', partial(add, 1)(2), 3
 test 'partial - with placeholder', partial(add, _, 1)(2), 3
 test 'partial - with placeholder interleaved', partial(append, _, 'b', _)('a','c'), 'abc'
+
+test 'apply', apply(add, [1,2]), 3
+test 'applyNew', applyNew(Person, ['Josh',25]) instanceof Person, true
 
 test 'flip', flip(sub)(2, 3), 1
 test 'flip3', flip3((x, y, z) -> x - y - z)(2, 3, 5), 0
@@ -76,7 +82,7 @@ test 'flatMap', flatMap([1,2], (x) -> flatMap([3,4], (y) -> x + y)), [4,5,5,6]
 test 'pluck array', pluck(1, [1,2,3]), 2
 test 'pluck object', pluck('a', {a:1, b:2, c:3}), 1
 
-test 'pluckR', true, true
+test 'rpluck', true, true
 
 test 'where', where({name:'Peter'}, [{name:'Peter'},{name:'Jon'},{name:'Mike'}]), [{name:'Peter'}]
 

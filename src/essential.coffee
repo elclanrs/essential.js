@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.6
+# Essential.js 1.1.7
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -21,7 +21,7 @@ ncurry = (n, f, as=[]) -> (bs...) ->
   if f.length > as.length then ncurry f.length, f, as else f as...
 
 apply = λ (f, as) -> f as...
-applyNew = λ (f, as) -> new (f.bind.apply f, [null].concat as)
+applyNew = λ (f, as) -> new (f.bind [null, as...]...)
 
 partial = (f, as...) -> (bs...) ->
   args = as.concat bs
