@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.2.0
+# Essential.js 1.1.10
 # @author Cedric Ruiz
 # @license MIT
 ###
