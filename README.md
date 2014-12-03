@@ -25,7 +25,7 @@ Essential.js is an alternative to [Underscore.js](http://underscorejs.org/) that
 
 ## API
 
-```javascript
+```coffeescript
 module.exports = {
   # Core
   _, id, K,
