@@ -31,19 +31,19 @@ module.exports = {
   _, id, K,
   builtin, toArray,
   variadic, apply, applyNew,
-  curryN, λ, curry, partial,
-  flip, flip3, flipN,
-  compose, sequence, pcompose,
-  notF, eq, notEq, typeOf, isType,
+  ncurry, λ, curry, partial,
+  flip, flip3, nflip,
+  compose, pcompose, sequence, over,
+  notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepClone, forOwn,
   fold, foldr, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
-  pluck, pluckR, where,
+  pluck, rpluck, where,
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch
+  format, template, gmatch,
   # Fantasy
   fmap, ap, chain, liftA, seqM
 }
