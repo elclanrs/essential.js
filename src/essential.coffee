@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.10
+# Essential.js 1.1.11
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -128,7 +128,8 @@ flatMap = flip compose flatten, map
 
 pluck = λ (x, xs) ->
   String(x).split('.').reduce (acc, x) ->
-    acc and acc[x]
+    return unless acc?
+    acc[x]
   ,xs
 
 rpluck = λ (x, xs) ->
