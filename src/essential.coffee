@@ -43,9 +43,9 @@ over = λ (f, g, x, y) -> f g(x), g y
 
 notF = (f) -> (as...) -> not f as...
 eq = λ (x, y) -> y is x
-notEq = ncurry 2, notF eq
+notEq = λ (x, y) -> y isnt x
 
-typeOf = (x) -> Object::toString.call(x).slice(8,-1)
+typeOf = (x) -> Object::toString.call(x).slice 8, -1
 isType = λ (t, x) -> typeOf(x) is t
 
 toObject = (xs) ->
@@ -83,7 +83,9 @@ forOwn = λ (acc, f, obj) ->
   acc
 
 fold = flip3 builtin Array::reduce
+fold1 = λ (f, xs) -> fold xs[0], f, xs
 foldr = flip3 builtin Array::reduceRight
+foldr1 = λ (f, xs) -> foldr xs[0], f, xs
 map = flip builtin Array::map
 filter = flip builtin Array::filter
 any = flip builtin Array::some
@@ -228,7 +230,7 @@ module.exports = {
   compose, pcompose, sequence, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
-  fold, foldr, map, filter, any, all, each, indexOf, concat,
+  fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
   pluck, rpluck, where,
