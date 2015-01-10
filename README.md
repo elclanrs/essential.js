@@ -36,7 +36,7 @@ module.exports = {
   compose, pcompose, sequence, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
-  fold, foldr, map, filter, any, all, each, indexOf, concat,
+  fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
   pluck, rpluck, where,
