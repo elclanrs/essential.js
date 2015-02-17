@@ -33,6 +33,7 @@ module.exports = {
   variadic, apply, applyNew,
   ncurry, λ, curry, partial,
   flip, flip3, nflip,
+  unary, binary, nary,
   compose, pcompose, sequence, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
