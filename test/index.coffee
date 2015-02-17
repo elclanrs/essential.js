@@ -31,6 +31,10 @@ test 'flip', flip(sub)(2, 3), 1
 test 'flip3', flip3((x, y, z) -> x - y - z)(2, 3, 5), 0
 test 'nflip', nflip(append)('a','b','c'), 'cba'
 
+test 'unary', [1,2,3].map(unary variadic), [[1], [2], [3]]
+test 'binary', [1,2,3].map(binary variadic), [[1,0], [2,1], [3,2]]
+test 'nary', [1,2,3].map(nary 1, variadic), [[1], [2], [3]]
+
 test 'compose', compose(curry(add)(1), curry(mul)(2))(2), 5
 test 'sequence', sequence(curry(add)(1), curry(mul)(2))(2), 6
 test 'pcompose', pcompose(add(1), mul(2), add(3))([1,2,3]), [2,4,6]

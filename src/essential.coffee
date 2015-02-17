@@ -35,6 +35,10 @@ flip = λ (f, x, y) -> f y, x
 flip3 = λ (f, x, y, z) -> f z, y, x
 nflip = (f) -> (as...) -> f as.reverse()...
 
+unary = λ (f, x) -> f x
+binary = λ (f, x, y) -> f x, y
+nary = λ (n, f) -> (as...) -> f as[0...n]...
+
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 pcompose = (fs...) -> (xs) -> xs.map (x, i) -> fs[i]? x
 sequence = nflip compose
@@ -227,6 +231,7 @@ module.exports = {
   variadic, apply, applyNew,
   ncurry, λ, curry, partial,
   flip, flip3, nflip,
+  unary, binary, nary,
   compose, pcompose, sequence, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
