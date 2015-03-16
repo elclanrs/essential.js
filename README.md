@@ -40,7 +40,7 @@ module.exports = {
   fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
-  pluck, rpluck, where,
+  pluck, deepPluck, where, deepWhere,
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
