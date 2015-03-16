@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.14
+# Essential.js 1.1.15
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -151,7 +151,9 @@ where = λ (obj, xs) ->
 deepWhere = λ (match, xs) ->
   find = λ (match, obj) ->
     Object.keys(obj).every (k) ->
-      if typeof obj[k] is 'object' and typeof match[k] is 'object'
+      mustFind = [obj[k], match[k]].every (x) ->
+        isType 'Object', x or isType 'Array', x
+      if mustFind
         return find match[k], obj[k]
       match[k] is obj[k]
   xs.filter find match
