@@ -90,9 +90,10 @@ test 'flatMap', flatMap([1,2], (x) -> flatMap([3,4], (y) -> x + y)), [4,5,5,6]
 test 'pluck array', pluck(1, [1,2,3]), 2
 test 'pluck object', pluck('a', {a:1, b:2, c:3}), 1
 
-test 'rpluck', true, true
+test 'deepPluck', true, true
 
 test 'where', where({name:'Peter'}, [{name:'Peter'},{name:'Jon'},{name:'Mike'}]), [{name:'Peter'}]
+test 'deepWhere', deepWhere({a:{b:1}}, [{a:{b:1}}, {c:2}]), [{a:{b:1}}]
 
 test 'values', values({a:1, b:2, c:3}), [1,2,3]
 test 'pairs', pairs({a:1, b:2, c:3}), [['a',1],['b',2],['c',3]]

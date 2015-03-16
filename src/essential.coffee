@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.13
+# Essential.js 1.1.14
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -138,7 +138,7 @@ pluck = λ (x, xs) ->
     acc[x]
   ,xs
 
-rpluck = λ (x, xs) ->
+deepPluck = λ (x, xs) ->
   out = []
   while xs = pluck x, xs
     out.push xs
@@ -147,6 +147,14 @@ rpluck = λ (x, xs) ->
 where = λ (obj, xs) ->
   xs.filter (x) ->
     Object.keys(obj).every (k) -> obj[k] is x[k]
+
+deepWhere = λ (match, xs) ->
+  find = λ (match, obj) ->
+    Object.keys(obj).every (k) ->
+      if typeof obj[k] is 'object' and typeof match[k] is 'object'
+        return find match[k], obj[k]
+      match[k] is obj[k]
+  xs.filter find match
 
 values = (obj) -> (v for own _, v of obj)
 pairs = forOwn [], (acc, k, v) -> acc.concat [[k, v]]
@@ -238,7 +246,7 @@ module.exports = {
   fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
-  pluck, rpluck, where,
+  pluck, deepPluck, where, deepWhere,
   values, pairs, zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
