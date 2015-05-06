@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.15
+# Essential.js 1.1.16
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -109,6 +109,11 @@ drop = partial slice, _, null, _
 
 inArray = λ (xs, x) -> x in xs
 
+remove = λ (x, xs) ->
+  ys = xs[..]
+  ys.splice xs.indexOf(x), 1
+  ys
+
 uniqueBy = λ (f, xs) ->
   seen = []
   xs.filter (x) ->
@@ -161,6 +166,19 @@ deepWhere = λ (match, xs) ->
 values = (obj) -> (v for own _, v of obj)
 pairs = forOwn [], (acc, k, v) -> acc.concat [[k, v]]
 
+interleave = λ ([x, xs...], ys) ->
+  unless x?
+    return ys
+  [x].concat interleave ys, xs
+
+intersperse = λ (x, xs) ->
+  out = [xs[0]]
+  for y, i in xs[1..]
+    out.push x, y
+  out
+
+intercalate = compose flatten, intersperse
+
 zip = (xss...) -> xss[0].map (_, i) -> xss.map pluck i
 zipWith = (f, xss...) -> apply(zip, xss).map partial apply, f
 
@@ -211,6 +229,21 @@ gmatch = λ (re, x) ->
   x.replace re, (as...) -> out.push.apply out, as[1...-2]
   out
 
+permutations = (xs) ->
+  unless xs.length
+    return [[]]
+  out = []
+  for x in xs
+    for ys in permutations remove x, xs
+      out.push [x].concat ys
+  out
+
+powerset = ([x, xs...]) ->
+  unless x?
+    return [[]]
+  xss = powerset xs
+  interleave xss, xss.map binary concat, [x]
+
 # Fantasy
 #
 fmap = λ (f, ma) -> ma.map f
@@ -247,12 +280,14 @@ module.exports = {
   toObject, extend, deepExtend, deepClone, forOwn,
   fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
-  inArray, uniqueBy, unique, dups, flatten, union, intersection, flatMap,
+  inArray, remove, uniqueBy, unique, dups,
+  flatten, union, intersection, flatMap,
   pluck, deepPluck, where, deepWhere,
-  values, pairs, zip, zipWith, zipObject, unzipObject,
+  values, pairs, interleave, intersperse, intercalate,
+  zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch,
+  format, template, gmatch, permutations, powerset,
   # Fantasy
   fmap, ap, chain, liftA, seqM
 }

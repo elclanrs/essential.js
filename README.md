@@ -1,6 +1,6 @@
 ![essential.js](http://i.imgur.com/CalNHKK.png)
 
-**Latest:** 1.1.15  
+**Latest:** 1.1.16  
 **Compatibility:** Node, ES5, Common, AMD  
 **License:** MIT  
 
