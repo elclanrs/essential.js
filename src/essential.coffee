@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.16
+# Essential.js 1.1.17
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -202,7 +202,6 @@ sortBy = λ (f, xs) ->
     fx = f x
     fy = f y
     switch
-      when typeof fx is 'number' then fx - fy
       when fx > fy then 1
       when fx < fy then -1
       else 0
