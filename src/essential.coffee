@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.17
+# Essential.js 1.1.18
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -118,7 +118,6 @@ uniqueBy = λ (f, xs) ->
   seen = []
   xs.filter (x) ->
     fx = f x
-    return true unless fx?
     return if fx in seen
     seen.push fx
     true
