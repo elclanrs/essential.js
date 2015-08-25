@@ -2,7 +2,7 @@
   "author": "elclanrs",
   "name": "essentialjs",
   "description": "Essential helpers for functional JavaScript",
-  "version": "1.1.19",
+  "version": "1.1.20",
   "main": "lib/essential.js",
   "repository": {
     "type": "git",

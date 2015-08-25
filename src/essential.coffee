@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.19
+# Essential.js 1.1.20
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -136,7 +136,7 @@ flatten = (xs) ->
 union = compose unique, flatten, variadic
 intersection = compose unique, dups, flatten, variadic
 
-flatMap = (xs, f) ->
+flatMap = λ (xs, f) ->
   xs.reduce (acc, x) ->
     acc.concat f x
   ,[]
