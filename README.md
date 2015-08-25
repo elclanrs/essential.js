@@ -39,14 +39,14 @@ module.exports = {
   toObject, extend, deepExtend, deepClone, forOwn,
   fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
-  inArray, remove, uniqueBy, unique, dups,
+  inArray, remove, tails, uniqueBy, unique, dups,
   flatten, union, intersection, flatMap,
   pluck, deepPluck, where, deepWhere,
   values, pairs, interleave, intersperse, intercalate,
   zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch, permutations, powerset,
+  format, template, gmatch, permutations, combinations, powerset,
   # Fantasy
   fmap, ap, chain, liftA, seqM
 }
