@@ -118,6 +118,22 @@ test 'format', format(['a','c'], '%1b%2d'), 'abcd'
 test 'template', template({a:'a', c:'c'}, '#{a}b#{c}d'), 'abcd'
 test 'gmatch', gmatch(/\{(.+?)\}/g, '{a}b{c}d'), ['a','c']
 
+### TODO
+remove
+tails
+interleave
+intersperse
+permutations
+combinations
+powerset
+
+fmap
+ap
+chain
+liftA
+seqM
+###
+
 console.log """
 
 ***********************

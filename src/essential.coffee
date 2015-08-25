@@ -1,5 +1,5 @@
 ###
-# Essential.js 1.1.18
+# Essential.js 1.1.19
 # @author Cedric Ruiz
 # @license MIT
 ###
@@ -114,6 +114,8 @@ remove = λ (x, xs) ->
   ys.splice xs.indexOf(x), 1
   ys
 
+tails = (xs) -> xs.map (x, i) -> xs[i..]
+
 uniqueBy = λ (f, xs) ->
   seen = []
   xs.filter (x) ->
@@ -134,7 +136,10 @@ flatten = (xs) ->
 union = compose unique, flatten, variadic
 intersection = compose unique, dups, flatten, variadic
 
-flatMap = flip compose flatten, map
+flatMap = (xs, f) ->
+  xs.reduce (acc, x) ->
+    acc.concat f x
+  ,[]
 
 pluck = λ (x, xs) ->
   String(x).split('.').reduce (acc, x) ->
@@ -236,6 +241,15 @@ permutations = (xs) ->
       out.push [x].concat ys
   out
 
+combinations = (xs) ->
+  combine = (n, xs) ->
+    if n is 0
+      return [[]]
+    flatMap tails(xs), ([y, xs_...]) ->
+      combine(n - 1, xs_).map (ys) ->
+        [y, ys...]
+  flatMap [1..xs.length], (n) -> combine n, xs
+
 powerset = ([x, xs...]) ->
   unless x?
     return [[]]
@@ -278,14 +292,14 @@ module.exports = {
   toObject, extend, deepExtend, deepClone, forOwn,
   fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
-  inArray, remove, uniqueBy, unique, dups,
+  inArray, remove, tails, uniqueBy, unique, dups,
   flatten, union, intersection, flatMap,
   pluck, deepPluck, where, deepWhere,
   values, pairs, interleave, intersperse, intercalate,
   zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch, permutations, powerset,
+  format, template, gmatch, permutations, combinations, powerset,
   # Fantasy
   fmap, ap, chain, liftA, seqM
 }
