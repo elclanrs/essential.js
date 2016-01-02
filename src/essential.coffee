@@ -42,6 +42,7 @@ nary = λ (n, f) -> (as...) -> f as[0...n]...
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 pcompose = (fs...) -> (xs) -> xs.map (x, i) -> fs[i]? x
 sequence = nflip compose
+psequence = nflip pcompose
 
 over = λ (f, g, x, y) -> f g(x), g y
 
