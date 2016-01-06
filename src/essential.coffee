@@ -41,7 +41,7 @@ nary = λ (n, f) -> (as...) -> f as[0...n]...
 
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 pcompose = (fs...) -> (xs) -> xs.map (x, i) -> fs[i]? x
-sequence = nflip compose
+pipe = seq = sequence = nflip compose
 psequence = nflip pcompose
 
 over = λ (f, g, x, y) -> f g(x), g y
@@ -278,6 +278,20 @@ seqM = λ (ctor, ms) ->
     ctor.of []
   )
 
+add = λ (x, y) -> x + y
+mul = λ (x, y) -> x * y
+sub = λ (x, y) -> x - y
+append = (as...) -> as.reduce add
+
+# either provides an easy fallback for default data (`either foo(),default()`)
+either = curry (a,b,data) -> a(data) || b(data)
+
+# easily map all functions of a module to itself (or another scope)
+# to ensure `this` reference from changing
+bindAll = (obj,scope) -> 
+  scope = obj if not scope?
+  forOwn obj, (k,v) -> obj[k] = v.bind scope if typeof v is "function"
+
 # Exports
 #
 module.exports = {
@@ -288,7 +302,7 @@ module.exports = {
   ncurry, λ, curry, partial,
   flip, flip3, nflip,
   unary, binary, nary,
-  compose, pcompose, sequence, over,
+  compose, pcompose, sequence, seq, pipe, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
   fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
@@ -300,9 +314,19 @@ module.exports = {
   zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch, permutations, combinations, powerset,
+  format, template, gmatch, permutations, combinations, powerset, bindAll
+  # Math / Logical
+  add, mul, sub, append, either,
   # Fantasy
   fmap, ap, chain, liftA, seqM
 }
 
 module.exports.expose = partial extend, _, module.exports
+module.exports.local = ( () ->
+  code = () ->
+    str = 'var ejs = require("essentialjs")'
+    str += " ;#{k} = ejs.#{k}" for k,v of @ when k != '_'
+    return str+";"
+  code.apply @
+  new Function( 'require', code.apply @ )
+).bind module.exports 

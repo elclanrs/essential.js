@@ -5,11 +5,6 @@ test = (name, result, expected) ->
   assert result, expected, "#{name}: expected #{JSON.stringify expected} but got #{JSON.stringify result}"
   console.log "#{name} ✓"
 
-add = λ (x, y) -> x + y
-mul = λ (x, y) -> x * y
-sub = λ (x, y) -> x - y
-append = (as...) -> as.reduce add
-
 even = (x) -> x % 2 is 0
 
 class Person
@@ -37,6 +32,8 @@ test 'nary', [1,2,3].map(nary 1, variadic), [[1], [2], [3]]
 
 test 'compose', compose(curry(add)(1), curry(mul)(2))(2), 5
 test 'sequence', sequence(curry(add)(1), curry(mul)(2))(2), 6
+test 'seq - shorthand for sequence', seq(curry(add)(1), curry(mul)(2))(2), 6
+test 'pipe functions thru eachother', pipe(curry(add)(1), curry(mul)(2))(2), 6
 test 'pcompose', pcompose(add(1), mul(2), add(3))([1,2,3]), [2,4,6]
 test 'over', over(add, mul(2), 3, 4), 14
 
@@ -109,14 +106,18 @@ test 'range', range(0,10), [0..10]
 xs = [1..5]
 test 'shuffle - copies array', shuffle(xs) is xs, false
 
-test 'sortBy', sortBy(id, [3,4,2,5,1]), [1,2,3,4,5]
+test 'sortBy - collection', sortBy(id, [3,4,2,5,1]), [1,2,3,4,5]
 test 'groupBy', groupBy(Math.round, [1.1,1.2,1.3,1.6,1.7,1.8]), {1:[1.1,1.2,1.3], 2:[1.6,1.7,1.8]}
 test 'groupBy - collection', groupBy(((x) -> x.n), [{n:1},{n:1},{n:2},{n:2}]), {1:[{n:1},{n:1}],2:[{n:2},{n:2}]}
 test 'countBy', countBy(Math.round, [1.1,1.2,1.3,1.6,1.7,1.8]), {1:3, 2:3}
 
-test 'format', format(['a','c'], '%1b%2d'), 'abcd'
-test 'template', template({a:'a', c:'c'}, '#{a}b#{c}d'), 'abcd'
+test 'format - formatting strings', format(['a','c'], '%1b%2d'), 'abcd'
+test 'template - string evaluation', template({a:'a', c:'c'}, '#{a}b#{c}d'), 'abcd'
 test 'gmatch', gmatch(/\{(.+?)\}/g, '{a}b{c}d'), ['a','c']
+
+test 'either - handy for fallback', either( ((id) -> null), ((id) -> 'not found'), 1234 ), 'not found'
+
+test 'bindAll - bind obj functions to scope', true, true
 
 ### TODO
 remove

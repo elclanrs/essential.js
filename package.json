@@ -14,6 +14,7 @@
   "scripts": {
     "compile": "coffee -c -o lib src/essential.coffee ",
     "test": "coffee test",
+    "gendoc": "grep '^test ' test/index.coffee | sed \"s/^test //g;s/^'//g;s/',/@/\" | column -t -s'@' | awk '{print \"    \"$0}'",
     "prepublish": "npm test && npm run-script compile"
   },
   "licenses": [{
