@@ -91,8 +91,21 @@ fold = flip3 builtin Array::reduce
 fold1 = λ (f, xs) -> fold xs[0], f, xs
 foldr = flip3 builtin Array::reduceRight
 foldr1 = λ (f, xs) -> foldr xs[0], f, xs
-map = flip builtin Array::map
-filter = flip builtin Array::filter
+map = ncurry( 2, () -> 
+  if isType 'Object', arguments[1]
+    result = {} ; f = arguments[0]
+    result[k] = f(v) for k,v of obj
+    return result
+  else return arguments[1].map arguments[0]
+)
+filter = ncurry( 2, () -> 
+  if isType 'Object', arguments[1]
+    result = {} ; f = arguments[0]
+    result[k] = v for k,v of obj when f(v,k)
+    result
+  else return arguments[1].filter arguments[0]
+)
+
 any = flip builtin Array::some
 all = flip builtin Array::every
 each = flip builtin Array::forEach
