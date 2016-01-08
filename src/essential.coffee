@@ -92,18 +92,18 @@ fold1 = λ (f, xs) -> fold xs[0], f, xs
 foldr = flip3 builtin Array::reduceRight
 foldr1 = λ (f, xs) -> foldr xs[0], f, xs
 map = ncurry( 2, () -> 
-  if isType 'Object', arguments[1]
-    result = {} ; f = arguments[0]
-    result[k] = f(v) for k,v of obj
-    return result
-  else return arguments[1].map arguments[0]
+  obj = false
+  input = ( if isType 'Object', arguments[1] then (obj = unzipObject(arguments[1]))[1] else arguments[1] )
+  result = input.map arguments[0]
+  return ( if obj then zipObject obj[0], result else result )
 )
+mapKeys = (obj,f) -> zipObject map( arguments[0], Object.keys arguments[1]), unzipObject(arguments[1])[1]
+
 filter = ncurry( 2, () -> 
-  if isType 'Object', arguments[1]
-    result = {} ; f = arguments[0]
-    result[k] = v for k,v of obj when f(v,k)
-    result
-  else return arguments[1].filter arguments[0]
+  obj = false
+  input = ( if isType 'Object', arguments[1] then (obj = unzipObject(arguments[1]))[1] else arguments[1] )
+  result = input.filter arguments[0]
+  return ( if obj then zipObject obj[0], result else result )
 )
 
 any = flip builtin Array::some
@@ -318,7 +318,7 @@ module.exports = {
   compose, pcompose, sequence, seq, pipe, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
-  fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
+  fold, fold1, foldr, foldr1, map, mapKeys, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, remove, tails, uniqueBy, unique, dups,
   flatten, union, intersection, flatMap,

@@ -2,8 +2,8 @@ require('../src/essential.coffee').expose global
 assert = require('assert').deepEqual
 
 test = (name, result, expected) ->
-  assert result, expected, "#{name}: expected #{JSON.stringify expected} but got #{JSON.stringify result}"
-  console.log "#{name} ✓"
+  assert JSON.stringify(result), JSON.stringify(expected), "#{name}: expected #{JSON.stringify expected} but got #{JSON.stringify result}"
+  console.log "#{name}✓"
 
 even = (x) -> x % 2 is 0
 
@@ -61,6 +61,8 @@ test 'forOwn', forOwn([], ((acc, k, v) -> acc.concat [k, v]), {a:1, b:2, c:3}), 
 test 'fold', fold(0, add, [1,2,3]), 6
 test 'foldr', foldr(6, sub, [1,2,3]), 0
 test 'map', map(curry(add)(1), [1,2,3]), [2,3,4]
+test 'map object values', map( curry(add)(1), {id:1,foo:1}), {id:2,foo:2}
+test 'map object keys', mapKeys( curry(add)(1), {id:1,foo:1}), {'1id':1,'1foo':1}
 test 'filter', filter(even, [1,2,3,4]), [2,4]
 test 'any', any(even, [1,2,3,4]), true
 test 'all', all(even, [1,2,3,4]), false
