@@ -106,6 +106,20 @@ generated with: `npm run-script gendoc`
     either - handy for fallback              either( ((id) -> null), ((id) -> 'not found'), 1234 ), 'not found'
     bindAll - bind obj functions to scope    bindAll( obj, [scope] )
 
+
+    # async map
+    var arr, done;
+    arr = [400, 300, 200, 100];
+    done = function(err) {
+      console.log("async done");
+      if( err ) console.log( err.toString() );
+    };
+    mapAsync(arr, done, function(v, k, next) {
+      return setTimeout(function() {
+        return next();
+      }, v);
+    });
+
 ## Local scope 
 
 If you [don't want to use global scope using expose()](http://stackoverflow.com/questions/2613310/ive-heard-global-variables-are-bad-what-alternative-solution-should-i-use), but 

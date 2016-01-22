@@ -121,6 +121,15 @@ test 'either - handy for fallback', either( ((id) -> null), ((id) -> 'not found'
 
 test 'bindAll - bind obj functions to scope', true, true
 
+
+# async map over array
+arr = [400,300,200,100] 
+done = (err) -> console.log "async done"
+mapAsync arr, done, (v,k,next) ->
+  setTimeout () -> 
+    next()
+  ,v
+
 ### TODO
 remove
 tails

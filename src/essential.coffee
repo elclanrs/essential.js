@@ -304,13 +304,26 @@ either = curry (a,b,data) -> a(data) || b(data)
 bindAll = (obj,scope) -> 
   scope = obj if not scope?
   forOwn obj, (k,v) -> obj[k] = v.bind scope if typeof v is "function"
+  
+mapAsync = (arr,done,cb) ->
+  funcs = [] ; i=0
+  for k,v of arr
+    f = (i,v) ->
+      () ->
+        try
+          cb v,i, funcs[i+1] || done
+        catch e
+          done new Error(e)
+    funcs.push f(i++,v)
+  funcs[0]()
+
 
 # Exports
 #
 module.exports = {
   # Core
   _, id, K,
-  builtin, toArray,
+  builtin, toArray, mapAsync,
   variadic, apply, applyNew,
   ncurry, λ, curry, partial,
   flip, flip3, nflip,
