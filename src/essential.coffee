@@ -311,19 +311,29 @@ mapAsync = (arr,done,cb) ->
     f = (i,v) ->
       () ->
         try
-          cb v,i, funcs[i+1] || done
+          if funcs[i+1]?
+            cb v,i, funcs[i+1] 
+          else cb v,i, done
         catch e
           done new Error(e)
     funcs.push f(i++,v)
   funcs[0]()
 
+createEventStream = (selector,event) ->
+  (next) ->
+    if selector[0] == "#"
+      element = document.querySelector(selector)
+      element.addEventListener( event, next ) if element
+    else
+      elements = document.querySelectorAll(selector)
+      element.addEventListener( event, next ) for element in elements
 
 # Exports
 #
 module.exports = {
   # Core
   _, id, K,
-  builtin, toArray, mapAsync,
+  builtin, toArray, mapAsync, createEventStream,
   variadic, apply, applyNew,
   ncurry, λ, curry, partial,
   flip, flip3, nflip,

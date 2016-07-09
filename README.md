@@ -120,6 +120,13 @@ generated with: `npm run-script gendoc`
       }, v);
     });
 
+    # reactive streams 
+    onbuttonpress = pipe(
+      createEventStream("#mybutton",'click'), 
+      pick('target'), 
+      pick('value')
+    ) 
+
 ## Local scope 
 
 If you [don't want to use global scope using expose()](http://stackoverflow.com/questions/2613310/ive-heard-global-variables-are-bad-what-alternative-solution-should-i-use), but 
