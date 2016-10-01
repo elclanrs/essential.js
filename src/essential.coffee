@@ -306,6 +306,7 @@ bindAll = (obj,scope) ->
   forOwn obj, (k,v) -> obj[k] = v.bind scope if typeof v is "function"
   
 mapAsync = (arr,done,cb) ->
+  done() if not arr or arr.length == 0
   funcs = [] ; i=0
   for k,v of arr
     f = (i,v) ->
