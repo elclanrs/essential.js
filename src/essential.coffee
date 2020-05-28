@@ -41,7 +41,8 @@ nary = λ (n, f) -> (as...) -> f as[0...n]...
 
 compose = (fs...) -> fs.reduce (f, g) -> (as...) -> f g as...
 pcompose = (fs...) -> (xs) -> xs.map (x, i) -> fs[i]? x
-sequence = nflip compose
+pipe = seq = sequence = nflip compose
+psequence = nflip pcompose
 
 over = λ (f, g, x, y) -> f g(x), g y
 
@@ -90,8 +91,21 @@ fold = flip3 builtin Array::reduce
 fold1 = λ (f, xs) -> fold xs[0], f, xs
 foldr = flip3 builtin Array::reduceRight
 foldr1 = λ (f, xs) -> foldr xs[0], f, xs
-map = flip builtin Array::map
-filter = flip builtin Array::filter
+map = ncurry( 2, () -> 
+  obj = false
+  input = ( if isType 'Object', arguments[1] then (obj = unzipObject(arguments[1]))[1] else arguments[1] )
+  result = input.map arguments[0]
+  return ( if obj then zipObject obj[0], result else result )
+)
+mapKeys = (obj,f) -> zipObject map( arguments[0], Object.keys arguments[1]), unzipObject(arguments[1])[1]
+
+filter = ncurry( 2, () -> 
+  obj = false
+  input = ( if isType 'Object', arguments[1] then (obj = unzipObject(arguments[1]))[1] else arguments[1] )
+  result = input.filter arguments[0]
+  return ( if obj then zipObject obj[0], result else result )
+)
+
 any = flip builtin Array::some
 all = flip builtin Array::every
 each = flip builtin Array::forEach
@@ -277,20 +291,58 @@ seqM = λ (ctor, ms) ->
     ctor.of []
   )
 
+add = λ (x, y) -> x + y
+mul = λ (x, y) -> x * y
+sub = λ (x, y) -> x - y
+append = (as...) -> as.reduce add
+
+# either provides an easy fallback for default data (`either foo(),default()`)
+either = curry (a,b,data) -> a(data) || b(data)
+
+# easily map all functions of a module to itself (or another scope)
+# to ensure `this` reference from changing
+bindAll = (obj,scope) -> 
+  scope = obj if not scope?
+  forOwn obj, (k,v) -> obj[k] = v.bind scope if typeof v is "function"
+  
+mapAsync = (arr,done,cb) ->
+  done() if not arr or arr.length == 0
+  funcs = [] ; i=0
+  for k,v of arr
+    f = (i,v) ->
+      () ->
+        try
+          if funcs[i+1]?
+            cb v,i, funcs[i+1] 
+          else cb v,i, done
+        catch e
+          done new Error(e)
+    funcs.push f(i++,v)
+  funcs[0]()
+
+createEventStream = (selector,event) ->
+  (next) ->
+    if selector[0] == "#"
+      element = document.querySelector(selector)
+      element.addEventListener( event, next ) if element
+    else
+      elements = document.querySelectorAll(selector)
+      element.addEventListener( event, next ) for element in elements
+
 # Exports
 #
 module.exports = {
   # Core
   _, id, K,
-  builtin, toArray,
+  builtin, toArray, mapAsync, createEventStream,
   variadic, apply, applyNew,
   ncurry, λ, curry, partial,
   flip, flip3, nflip,
   unary, binary, nary,
-  compose, pcompose, sequence, over,
+  compose, pcompose, sequence, seq, pipe, over,
   notF, not:notF, eq, notEq, typeOf, isType,
   toObject, extend, deepExtend, deepClone, forOwn,
-  fold, fold1, foldr, foldr1, map, filter, any, all, each, indexOf, concat,
+  fold, fold1, foldr, foldr1, map, mapKeys, filter, any, all, each, indexOf, concat,
   slice, first, last, rest, initial, take, drop,
   inArray, remove, tails, uniqueBy, unique, dups,
   flatten, union, intersection, flatMap,
@@ -299,9 +351,19 @@ module.exports = {
   zip, zipWith, zipObject, unzipObject,
   range, shuffle,
   sortBy, groupBy, countBy,
-  format, template, gmatch, permutations, combinations, powerset,
+  format, template, gmatch, permutations, combinations, powerset, bindAll
+  # Math / Logical
+  add, mul, sub, append, either,
   # Fantasy
   fmap, ap, chain, liftA, seqM
 }
 
 module.exports.expose = partial extend, _, module.exports
+module.exports.local = ( () ->
+  code = () ->
+    str = 'var ejs = require("essentialjs")'
+    str += " ;#{k} = ejs.#{k}" for k,v of @ when k != '_'
+    return str+";"
+  code.apply @
+  new Function( 'require', code.apply @ )
+).bind module.exports 

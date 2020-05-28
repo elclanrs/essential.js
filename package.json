@@ -2,7 +2,7 @@
   "author": "elclanrs",
   "name": "essentialjs",
   "description": "Essential helpers for functional JavaScript",
-  "version": "1.1.20",
+  "version": "1.1.3",
   "main": "lib/essential.js",
   "repository": {
     "type": "git",
@@ -12,8 +12,9 @@
     "coffeeify": "^0.7.0"
   },
   "scripts": {
-    "compile": "coffee -c -o lib src/essential.coffee ",
+    "compile": "coffee -c -o lib src/essential.coffee ; browserify --outfile essential.min.js -r .",
     "test": "coffee test",
+    "gendoc": "grep '^test ' test/index.coffee | sed \"s/^test //g;s/^'//g;s/',/@/\" | column -t -s'@' | awk '{print \"    \"$0}'",
     "prepublish": "npm test && npm run-script compile"
   },
   "licenses": [{
